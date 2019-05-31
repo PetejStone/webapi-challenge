@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/:id', validateUserId, (req, res) => {
+router.get('/:id', validateProjectId, (req, res) => {
     Projects.get(req.params.id)
     .then(project => {
         res.status(200).json({project})
@@ -35,7 +35,7 @@ router.post('/', validateProject, (req,res) => {
     })
 })
 
-router.put('/:id', validateUserId, (req,res) => {
+router.put('/:id', validateProjectId, validateProject, (req,res) => {
     
     Projects.update(req.params.id, req.body)
     .then(updatedProject => {
@@ -46,7 +46,7 @@ router.put('/:id', validateUserId, (req,res) => {
     })
 })
 
-router.delete('/:id', validateUserId, (req,res) => {
+router.delete('/:id', validateProjectId, (req,res) => {
     
     Projects.remove(req.params.id)
     .then(removedProject => {
@@ -57,7 +57,7 @@ router.delete('/:id', validateUserId, (req,res) => {
     })
 })
 
-async function validateUserId( req, res, next) {
+async function validateProjectId( req, res, next) {
  
     const id = await Projects.get(req.params.id);
   if (id) {
@@ -68,10 +68,10 @@ async function validateUserId( req, res, next) {
   }
   };
 
-  function validateProject(req, res, next) {
+   function validateProject(req, res, next) {
     const body = Object.keys(req.body);//converts object to array to get length
     const project= req.body;
-    if (req.body && req.body.notes && req.body.description) {
+    if (project && req.body.notes || req.body.description) {
       next();
     }
     if (body.length <= 0)  {
