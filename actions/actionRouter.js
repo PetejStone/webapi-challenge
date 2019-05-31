@@ -4,19 +4,29 @@ const Projects = require('../data/helpers/projectModel.js') // references db fil
 const Actions = require ('../data/helpers/actionModel.js')
 const router = express.Router(); //imports router use
 
-
-
-router.get('/:id/actions', validateProjectId, (req, res) => {
-    Projects.getProjectActions(req.params.id)
-    .then(projectActions => {
-        res.status(200).json({projectActions})
+router.get('/', (req, res) => {
+    Actions.get()
+    .then(actions => {
+        res.status(200).json({actions})
     })
     .catch(err => {
-        res.status(500).json({message: 'Could not retrieve project actions at this time'})
+        res.status(500).json({message: err})
     })
 })
 
-router.post('/:id/actions', validateProjectId, validateAction, (req, res) => {
+router.get('/:id', validateActionId, (req, res) => {
+   Actions.get(req.params.id)
+    .then(action => {
+        res.status(200).json({action})
+    })
+    .catch(err => {
+        res.status(500).json({message: "Error retrieving project from database"})
+    })
+})
+
+
+
+router.post('/:id',  validateProjectId, validateAction, (req, res) => {
     const actionInfo = { ...req.body, project_id: req.params.id };
     console.log(actionInfo)
     Actions.insert(actionInfo)
@@ -58,6 +68,17 @@ async function validateProjectId( req, res, next) {
     next()
   } else {
     res.status(400).json({message: "Invalid user id"})
+  }
+  };
+
+  async function validateActionId( req, res, next) {
+ 
+    const id = await Actions.get(req.params.id);
+  if (id) {
+    req.user = id
+    next()
+  } else {
+    res.status(400).json({message: "Invalid action id"})
   }
   };
 
