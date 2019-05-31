@@ -6,7 +6,7 @@ const router = express.Router(); //imports router use
 
 
 
-router.get('/:id/actions', validateUserId, (req, res) => {
+router.get('/:id/actions', validateProjectId, (req, res) => {
     Projects.getProjectActions(req.params.id)
     .then(projectActions => {
         res.status(200).json({projectActions})
@@ -16,7 +16,7 @@ router.get('/:id/actions', validateUserId, (req, res) => {
     })
 })
 
-router.post('/:id/actions', validateUserId, (req, res) => {
+router.post('/:id/actions', validateProjectId, (req, res) => {
     const actionInfo = { ...req.body, project_id: req.params.id };
     console.log(actionInfo)
     Actions.insert(actionInfo)
@@ -28,7 +28,7 @@ router.post('/:id/actions', validateUserId, (req, res) => {
     })
 })
 
-router.put('/:id/actions', validateUserId, (req, res) => {
+router.put('/:id/actions', validateProjectId, (req, res) => {
     
     Actions.update(req.params.id, req.body)
     .then(updatedAction => {
@@ -39,7 +39,7 @@ router.put('/:id/actions', validateUserId, (req, res) => {
     })
 })
 
-router.delete('/:id/actions', validateUserId, (req, res) => {
+router.delete('/:id/actions', validateProjectId, (req, res) => {
     
     Actions.remove(req.params.id)
     .then(deletedAction => {
@@ -50,7 +50,7 @@ router.delete('/:id/actions', validateUserId, (req, res) => {
     })
 })
 
-async function validateUserId( req, res, next) {
+async function validateProjectId( req, res, next) {
  
     const id = await Projects.get(req.params.id);
   if (id) {
