@@ -38,7 +38,7 @@ router.post('/:id',  validateProjectId, validateAction, (req, res) => {
     })
 })
 
-router.put('/:id/actions', validateProjectId, validateAction, (req, res) => {
+router.put('/:id', validateActionId, validateAction, (req, res) => {
     
     Actions.update(req.params.id, req.body)
     .then(updatedAction => {
@@ -49,7 +49,7 @@ router.put('/:id/actions', validateProjectId, validateAction, (req, res) => {
     })
 })
 
-router.delete('/:id/actions', validateProjectId, (req, res) => {
+router.delete('/:id/', validateActionId, (req, res) => {
     
     Actions.remove(req.params.id)
     .then(deletedAction => {
@@ -72,10 +72,12 @@ async function validateProjectId( req, res, next) {
   };
 
   async function validateActionId( req, res, next) {
- 
-    const id = await Actions.get(req.params.id);
-  if (id) {
-    req.user = id
+    const id = await Actions.get(req.params.id)
+    const action = Object.keys(id);//converts object to array to get length
+    
+    console.log(id)
+  if (id && action.length > 0 ) {
+    //req.user = id
     next()
   } else {
     res.status(400).json({message: "Invalid action id"})

@@ -9,7 +9,8 @@ module.exports = {
       return query
         .where('id', id)
         .first()
-        .then(action => mappers.actionToBody(action));
+        .then(action => mappers.actionToBody(action))
+        .catch(err => err);
     }
 
     return query.then(actions => {

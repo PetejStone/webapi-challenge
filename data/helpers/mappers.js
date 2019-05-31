@@ -32,6 +32,6 @@ function projectToBody(project) {
 function actionToBody(action) {
   return {
     ...action,
-    completed: intToBoolean(action.completed),
+    completed:  intToBoolean(action.completed ),
   };
 }
