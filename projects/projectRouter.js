@@ -24,18 +24,18 @@ router.get('/:id', validateUserId, (req, res) => {
     })
 })
 
-router.post('/', (req,res) => {
+router.post('/', validateProject, (req,res) => {
     
     Projects.insert(req.body)
     .then(newProject => {
         res.status(200).json({newProject})
     })
     .catch(err => {
-        res.status(500).json({message: "Server cannot add project at this time"})
+        res.status(500).json({message: `Server cannot add project at this time ${err}`})
     })
 })
 
-router.put('/:id', (req,res) => {
+router.put('/:id', validateUserId, (req,res) => {
     
     Projects.update(req.params.id, req.body)
     .then(updatedProject => {
@@ -46,7 +46,7 @@ router.put('/:id', (req,res) => {
     })
 })
 
-router.delete('/:id', (req,res) => {
+router.delete('/:id', validateUserId, (req,res) => {
     
     Projects.remove(req.params.id)
     .then(removedProject => {
@@ -66,6 +66,23 @@ async function validateUserId( req, res, next) {
   } else {
     res.status(400).json({message: "Invalid user id"})
   }
+  };
+
+  function validateProject(req, res, next) {
+    const body = Object.keys(req.body);//converts object to array to get length
+    const project= req.body;
+    if (req.body && req.body.notes && req.body.description) {
+      next();
+    }
+    if (body.length <= 0)  {
+      res.status(400).json({message: 'missing user data'})
+    }
+    if ( !project.name ) {
+      res.status(400).json({message: 'missing required name field'})
+    }
+    if ( !project.description ) {
+        res.status(400).json({message: 'missing required description field'})
+      }
   };
 
 module.exports = router
