@@ -17,7 +17,7 @@ server.get('/', (req, res) => {
   });
 
 function logger(req, res, next) {
-    console.log(`${req.method} request was made at ${req.url} on ${new Date().toISOString()}]`)
+    console.log(`${req.method} request was made at ${req.url} on ${new Date().toISOString()}]`)// new Date ISOString makes converts date into a readable string
     next();
 }
 

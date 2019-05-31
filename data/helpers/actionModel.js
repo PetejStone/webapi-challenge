@@ -10,7 +10,7 @@ module.exports = {
         .where('id', id)
         .first()
         .then(action => mappers.actionToBody(action))
-        .catch(err => err);
+        .catch(err => err); //added so that it caught the ID and didn't pass it to 'completed' in mappers. This then returns an empty object
     }
 
     return query.then(actions => {
