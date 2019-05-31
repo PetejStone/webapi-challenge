@@ -35,4 +35,15 @@ router.post('/', (req,res) => {
     })
 })
 
+router.put('/:id', (req,res) => {
+    
+    Projects.update(req.params.id, req.body)
+    .then(updatedProject => {
+        res.status(200).json({updatedProject})
+    })
+    .catch(err => {
+        res.status(500).json({message: "Server cannot update project at this time"})
+    })
+})
+
 module.exports = router
