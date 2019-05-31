@@ -71,7 +71,7 @@ async function validateProjectId( req, res, next) {
    function validateProject(req, res, next) {
     const body = Object.keys(req.body);//converts object to array to get length
     const project= req.body;
-    if (project && req.body.notes || req.body.description) {
+    if (project && req.body.name || req.body.description) {
       next();
     }
     if (body.length <= 0)  {
