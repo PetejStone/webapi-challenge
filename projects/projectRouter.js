@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/:id',(req, res) => {
+router.get('/:id', validateUserId, (req, res) => {
     Projects.get(req.params.id)
     .then(project => {
         res.status(200).json({project})
@@ -57,6 +57,15 @@ router.delete('/:id', (req,res) => {
     })
 })
 
-
+async function validateUserId( req, res, next) {
+ 
+    const id = await Projects.get(req.params.id);
+  if (id) {
+    req.user = id
+    next()
+  } else {
+    res.status(400).json({message: "Invalid user id"})
+  }
+  };
 
 module.exports = router
